@@ -7,6 +7,7 @@ const upload = multer({storage: multer.memoryStorage()});
 
 produsRouter.get('/getAllProduse', controller.getAllProducts);
 produsRouter.get('/getProduct', controller.getProduct);
+produsRouter.get('/getProductsByUser', controller.getProductsByUser);
 produsRouter.post("/createProduct",upload.single("filename"), controller.addProduct);
 produsRouter.put("/update-product",upload.single("filename"),controller.updateProduct);
 produsRouter.delete("/delete-product", controller.deleteProduct);

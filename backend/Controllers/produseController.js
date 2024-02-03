@@ -64,10 +64,12 @@ const controller = {
 
     updateProduct: async (req, res) => {
         const { productId ,titlu, descriere, pret, categorie } = req.body;
+        console.log(productId);
         try {
             const newDownloadLink = await upload(req); 
-            const productRef = doc(firestoreDb, 'produse', productId);
-            const produsDoc = await getDoc(productRef)
+            
+            const produsRef = doc(firestoreDb, 'produse', productId);
+            const produsDoc = await getDoc(produsRef)
             const produsData = produsDoc.data();
 
             const updateProdus = {
@@ -78,7 +80,7 @@ const controller = {
                 downloadLink: newDownloadLink || produsData.downloadLink
             }
 
-            await updateDoc(productRef, updateProdus);
+            await updateDoc(produsRef, updateProdus);
 
             res.send({ message: 'Product a fost updatat cu succes!' });
         } catch (error) {
