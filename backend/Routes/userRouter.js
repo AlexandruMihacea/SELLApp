@@ -8,5 +8,7 @@ const upload = multer({storage: multer.memoryStorage()});
 userRouter.get('/getAllUsers', controller.getAllUsers);
 userRouter.get('/getUser', controller.getUser);
 userRouter.post("/createUser",upload.single("filename"), controller.addUser);
+userRouter.put("/update-user",upload.single("filename"),controller.updateUser);
+userRouter.delete("/delete-user", controller.deleteUser);
 
 export {userRouter};

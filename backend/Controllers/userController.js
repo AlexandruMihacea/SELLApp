@@ -1,4 +1,4 @@
-import { collection, addDoc, getDoc, getDocs, query, where } from "firebase/firestore"; 
+import { collection, addDoc, getDoc, getDocs, query, where, updateDoc, doc, deleteDoc } from "firebase/firestore"; 
 import { firestoreDb } from "../firebase.js";
 import { upload } from "../Services/uploadPictures.js";
 
@@ -29,7 +29,7 @@ const controller = {
     addUser: async (req,res) => {
         try{
 
-            const {nume, prenume, email} = req.body;
+            const {nume, prenume, email, locatie, telefon} = req.body;
             let condition = true;
 
             if(nume == ""){
@@ -40,7 +40,13 @@ const controller = {
                 res.send("Prenumele este obligatoriu!");
             }else if(email == ""){
                 condition = false;
-                res.send("emailul este obligatoriu!");
+                res.send("Emailul este obligatoriu!");
+            }else if(locatie == ""){
+                condition = false;
+                res.send("Locatia este obligatorie!");
+            }else if(telefon == ""){
+                condition = false;
+                res.send("Locatia este obligatorie!");
             }
 
             if(condition){
@@ -48,7 +54,9 @@ const controller = {
                 const docRef = await addDoc(collection(firestoreDb,"users"),{
                     nume: nume,
                     prenume: prenume,
-                    email: email, 
+                    email: email,
+                    locatie: locatie, 
+                    telefon: telefon,
                     imagineProfilUrl: downloadLink
                 })
                 console.log("Document written with ID: ", docRef.id);
@@ -57,7 +65,53 @@ const controller = {
         }catch(err){
             console.error(err)
         }
+    },
+
+    updateUser: async(req,res)=> {
+        const { userId ,nume, prenume, email, locatie, telefon } = req.body;
+    
+        const newDownloadLink = await upload(req);   
+
+        try{
+            const userRef = doc(firestoreDb, 'users', userId);
+            const userDoc = await getDoc(userRef);
+            const userData = userDoc.data();
+
+            const updateData= {
+                imagineProfilUrl: newDownloadLink || userData.imagineProfilUrl,
+                nume: nume || userData.nume,
+                prenume: prenume || userData.prenume,
+                email: email || userData.email,
+                telefon: telefon || userData.telefon,
+                locatie: locatie || userData.locatie
+            };
+
+            await updateDoc(userRef, updateData);
+
+            res.send({ message: 'Userul a fost updatat cu succes!' });
+
+
+        }catch(err){
+            console.error(err);
+            res.status(500).send({ message: 'Eroare in updatarea datelor userlui!' });
+        }
+    },
+
+
+    deleteUser: async (req,res) => {
+        const {userId} = req.body;
+
+        try{
+            await deleteDoc(doc(firestoreDb, 'users', userId));
+            res.send({message: "Userul a fost sters cu succes!"})
+
+       }catch(err){
+            console.error(err);   
+            res.status(500).send({message: "Eroare in stergerea userului!"})
+       }
     }
+
+
 }
 
 
