@@ -1,10 +1,15 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import ListaAnunturi from './components/ListaAnunturi.vue';
 </script>
 
 <template>
-  <header>
+
+<div class="container">
+  <ListaAnunturi/>
+</div>
+  <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -17,11 +22,11 @@ import HelloWorld from './components/HelloWorld.vue'
     </div>
   </header>
 
-  <RouterView />
+  <RouterView /> -->
 </template>
 
 <style scoped>
-header {
+/* header {
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -54,10 +59,22 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+} */
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (min-width: 1024px) {
-  header {
+  
+  .container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  /* header {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
@@ -80,6 +97,6 @@ nav a:first-of-type {
 
     padding: 1rem 0;
     margin-top: 1rem;
-  }
+  } */
 }
 </style>
