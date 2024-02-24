@@ -16,6 +16,12 @@
   </template>
   
   <script>
+  import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
+
   export default {
     data() {
       return {
@@ -24,10 +30,17 @@
       };
     },
     methods: {
-      login() {
-        console.log('Utilizator:', this.username);
-        console.log('Parolă:', this.password);
-      }
+        login() {
+            signInWithEmailAndPassword(getAuth(), this.username, this.password)
+                .then((res) => {
+                    console.log("Autentificare realizata cu succes!");
+                    // router.push('/');
+                })
+                .catch((err) => {
+                console.error(err);
+                alert(err.message);
+                });
+        }
     }
   };
   </script>

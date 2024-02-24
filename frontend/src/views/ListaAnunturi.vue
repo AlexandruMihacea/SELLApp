@@ -1,13 +1,18 @@
 <script>
     import { computed, watchEffect } from 'vue';
     import { useStore } from 'vuex';
+    import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+
 
     export default {
     setup() {
         const store = useStore();
         const produse = computed(() => store.getters.getProduse);
+        // const user = getAuth()
+        // const firebaseUserIdToken = user.currentUser.getIdToken(true)
 
         watchEffect(() => {
+            // console.log(firebaseUserIdToken)
             store.dispatch('fetchProduse');
         });
 

@@ -1,18 +1,45 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink } from 'vue-router'
+
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUU0BGSMp6FtKhI2lcPrfBc2bshZvQOV0",
+  authDomain: "sellapp-8c660.firebaseapp.com",
+  projectId: "sellapp-8c660",
+  storageBucket: "sellapp-8c660.appspot.com",
+  messagingSenderId: "828753889284",
+  appId: "1:828753889284:web:2b4e83335cb7f29abf0d51"
+};
+
+initializeApp(firebaseConfig);
+
+const user = getAuth()
+
 
 export default {
   data() {
     return {
-      isLoggedIn: false, // Setează la true dacă utilizatorul este autentificat
-      username: '' // Numele utilizatorului autentificat
+      isLoggedIn: false, 
+      username: '' 
     };
   },
   methods: {
     logout() {
-      // Implementează funcția de deconectare
-      // Poate include logica pentru a seta isLoggedIn la false și a șterge datele de utilizator
+       signOut(getAuth());
     }
+  },
+  mounted(){
+    onAuthStateChanged(getAuth(), (user) => {
+      if (user) {
+        this.isLoggedIn = true;
+        this.username = user.displayName; 
+      } else {
+        this.isLoggedIn = false;
+        this.username = ''; 
+      }
+    });
   }
 };
 </script>
@@ -24,14 +51,15 @@ export default {
       </div>
       <div class="user-section">
         <template v-if="isLoggedIn">
-         
-          <span>Bun venit, {{ username }}!</span>
+        
+          <RouterLink to="/profil" class="btns">Profil</RouterLink>
+          <RouterLink to="/" class="btns">Acasa</RouterLink>
           <button @click="logout">Deconectare</button>
           
         </template>
         <template v-else>
     
-            <RouterLink to="/" class="btns">Home</RouterLink>
+            <RouterLink to="/" class="btns">Acasa</RouterLink>
             <RouterLink to="/login" class="btns">Login</RouterLink>
             <RouterLink to="/register" class="btns">Register</RouterLink>
         

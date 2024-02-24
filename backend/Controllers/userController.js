@@ -19,8 +19,10 @@ const controller = {
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0].data();
-            res.send(userDoc);
+            const userDoc = querySnapshot.docs[0];
+            const userData = userDoc.data();
+            userData.id = userDoc.id;
+            res.send(userData);
         } else {
             res.send("Utilizatorul nu a fost găsit.");
         }

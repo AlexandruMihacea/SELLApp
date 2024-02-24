@@ -23,6 +23,10 @@
           <input type="tel" id="phone" v-model="phone" placeholder="Introduceți numărul de telefon" required>
         </div>
         <div class="form-group">
+          <label for="password">Parolă:</label>
+          <input type="password" id="password" v-model="password" placeholder="Introdu parola" required>
+        </div>
+        <div class="form-group">
           <label for="profileImage">Imagine de profil:</label>
           <input type="file" id="profileImage" @change="handleImageUpload">
         </div>
@@ -32,6 +36,12 @@
   </template>
   
   <script>
+  import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+
+  import { useStore } from 'vuex';
+
+  const store = useStore();
+
   export default {
     data() {
       return {
@@ -45,13 +55,23 @@
     },
     methods: {
       register() {
-        // Implementați aici logica de înregistrare
-        console.log('Nume:', this.firstName);
-        console.log('Prenume:', this.lastName);
-        console.log('Email:', this.email);
-        console.log('Locație:', this.location);
-        console.log('Telefon:', this.phone);
-        console.log('Imagine de profil:', this.profileImage);
+        
+        createUserWithEmailAndPassword(getAuth(), email.value, password.value)
+        .then((res) => {
+            console.log("Inregistrare realizata cu succes!")
+            this.$store.dispatch('createUser', {
+              prenume: this.firstName,
+              nume: this.lastName,
+              email: this.email,
+              locatie: this.location,
+              telefon: this.phone,
+              filename: this.profileImage
+            });
+        })
+        .catch((err) => {
+            console.error(err)
+            alert(err.message);
+        })
       },
       handleImageUpload(event) {
         this.profileImage = event.target.files[0];
@@ -81,7 +101,8 @@
   
   input[type="text"],
   input[type="email"],
-  input[type="tel"] {
+  input[type="tel"],
+  input[type="password"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;

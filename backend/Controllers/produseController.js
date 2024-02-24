@@ -91,6 +91,7 @@ const controller = {
 
     deleteProduct: async (req, res) => {
         const { productId } = req.body;
+        console.log(productId);
 
         try {
             await deleteDoc(doc(firestoreDb, 'produse', productId));
@@ -108,7 +109,9 @@ const controller = {
             const querySnapshot = await getDocs(q);
             const products = [];
             querySnapshot.forEach((doc) => {
-                products.push(doc.data());
+                const prodData = doc.data();
+                prodData.id = doc.id;
+                products.push(prodData);
             });
             res.send(products);
         } catch (error) {
